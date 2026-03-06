@@ -1,7 +1,58 @@
-{
-  "questions": [],
-  "metadata": {
-    "version": 1,
-    "description": "Reserved for future evaluation question sets"
-  }
+﻿{
+  "questions": [
+    {
+      "id": "q1",
+      "source": "浜哄伐鏅鸿兘鍩虹.pdf",
+      "question": "According to the slides, what does the textbook-adopted AI viewpoint emphasize: acting humanly, thinking humanly, thinking rationally, or acting rationally?",
+      "expected_keywords": ["acting rationally", "rational behavior"]
+    },
+    {
+      "id": "q2",
+      "source": "浜哄伐鏅鸿兘鍩虹.pdf",
+      "question": "In the Turing Test description, what benchmark did Turing predict by around 2000?",
+      "expected_keywords": ["30%", "fool", "5 minutes"]
+    },
+    {
+      "id": "q3",
+      "source": "浜哄伐鏅鸿兘鍩虹.pdf",
+      "question": "How is a rational agent abstractly defined in the material?",
+      "expected_keywords": ["function", "percept histories", "actions"]
+    },
+    {
+      "id": "q4",
+      "source": "娴呰皥浜哄伐鏅鸿兘 (1).pdf",
+      "question": "What core ideas in modern AI does this document emphasize when discussing practical systems or trends?",
+      "expected_keywords": ["modern AI", "methods", "applications"]
+    },
+    {
+      "id": "q5",
+      "source": "娴呰皥浜哄伐鏅鸿兘 (1).pdf",
+      "question": "Name one challenge or limitation highlighted in the document for current AI approaches.",
+      "expected_keywords": ["limitations", "challenge", "constraint"]
+    },
+    {
+      "id": "q6",
+      "source": "鐜颁唬浜哄伐鏅鸿兘锛氭湰璐ㄣ€侀€斿緞鍜屾柟鍚?pdf",
+      "question": "What major future directions are listed for AI algorithms in this document (provide at least two)?",
+      "expected_keywords": ["high-dimensional optimization", "online methods", "sampling", "RL", "lower bounds"]
+    },
+    {
+      "id": "q7",
+      "source": "鐜颁唬浜哄伐鏅鸿兘锛氭湰璐ㄣ€侀€斿緞鍜屾柟鍚?pdf",
+      "question": "How does the document characterize the relationship between data-driven modeling and algorithmic modeling?",
+      "expected_keywords": ["fusion", "two cultures", "integration"]
+    },
+    {
+      "id": "q8",
+      "source": "鐜颁唬浜哄伐鏅鸿兘锛氭湰璐ㄣ€侀€斿緞鍜屾柟鍚?pdf",
+      "question": "What three-layer perspective (inspired by Marr/Poggio discussion) is proposed for understanding AI systems?",
+      "expected_keywords": ["representation", "computation", "alignment"]
+    },
+    {
+      "id": "q9",
+      "source": "multiple",
+      "question": "Cross-document: compare how 'rational agent' framing in the fundamentals slides and 'alignment' framing in modern AI article complement each other.",
+      "expected_keywords": ["rational decision", "goals", "alignment", "system outputs"]
+    }
+  ]
 }

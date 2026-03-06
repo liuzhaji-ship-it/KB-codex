@@ -5,3 +5,12 @@
 [2026-03-06T15:06:13] status stage=waiting_for_review stable=10.6s since_last_trigger=1772780773.6s checks(stage_ok=True, stable_ok=True, interval_ok=True) action=would_trigger_reviewer
 [2026-03-06T15:06:13] trigger_decision: would_trigger_reviewer
 [2026-03-06T15:06:13] watcher_minimal done triggered=True reason=would_trigger_reviewer
+[2026-03-06T15:41:13] watcher_minimal started
+[2026-03-06T15:41:13] status stage=waiting_for_review stable=-46.1s since_last_trigger=1772782873.9s checks(stage_ok=True, stable_ok=False, interval_ok=True) action=would_trigger_reviewer
+[2026-03-06T15:41:13] watcher_minimal done triggered=False reason=not_triggered
+[2026-03-06T15:41:20] watcher_minimal started
+[2026-03-06T15:41:20] status stage=waiting_for_review stable=8.3s since_last_trigger=1772782880.3s checks(stage_ok=True, stable_ok=True, interval_ok=True) action=would_trigger_reviewer
+[2026-03-06T15:41:20] trigger_decision: would_trigger_reviewer
+[2026-03-06T15:41:35] watcher_minimal started
+[2026-03-06T15:41:35] status stage=waiting_for_review stable=23.3s since_last_trigger=1772782895.3s checks(stage_ok=True, stable_ok=True, interval_ok=True) action=would_trigger_reviewer
+[2026-03-06T15:41:35] trigger_decision: would_trigger_reviewer

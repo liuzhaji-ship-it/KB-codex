@@ -79,10 +79,10 @@ def run_codex(action: str):
     prompt_file = "manager_prompt.txt" if action == "would_trigger_manager" else "reviewer_prompt.txt"
     prompt_path = ROOT / "scripts" / prompt_file
     cmd = [
-        "codex", "exec",
-        "--full-auto",
-        "--sandbox", "workspace-write",
-        f"Please execute instructions from {prompt_path.as_posix()} and obey manager/agent_roles_v1.md"
+        "powershell",
+        "-NoProfile",
+        "-Command",
+        f"codex exec --full-auto --sandbox workspace-write \"Please execute instructions from {prompt_path.as_posix()} and obey manager/agent_roles_v1.md\""
     ]
     p = subprocess.run(cmd, cwd=str(ROOT), text=True, capture_output=True)
     log(f"codex_run action={action} exit={p.returncode}")
