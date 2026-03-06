@@ -2,6 +2,8 @@
 
 ## OpenClaw + Codex CLI 自动协作框架（v1）
 
+> 角色与权限以 `manager/agent_roles_v1.md` 为准；若与其他历史文档冲突，以该文件为准。
+
 当前系统由 **OpenClaw + Codex CLI + watcher** 组成：
 
 1. **OpenClaw（开发执行端）**

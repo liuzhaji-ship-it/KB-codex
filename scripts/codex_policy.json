@@ -1,20 +1,29 @@
 {
-  "mode": "max_auto",
+  "mode": "review_planning_only",
   "codex_exec_flags": [
-    "--dangerously-bypass-approvals-and-sandbox",
+    "--full-auto",
     "--sandbox",
-    "danger-full-access"
+    "workspace-write"
+  ],
+  "allowed_write_paths": [
+    "manager/",
+    "eval/",
+    "handoff/latest_status.json"
+  ],
+  "forbidden_write_paths": [
+    "src/",
+    "app/",
+    "backend/",
+    "frontend/",
+    "*.py",
+    "*.ts",
+    "*.js"
   ],
   "default_owner": "openclaw",
   "planning_executor": "openclaw",
-  "planner_behavior": {
-    "require_research": true,
-    "min_research_sources": 3,
-    "must_check": [
-      "open-source maturity",
-      "commercial license",
-      "deployment complexity",
-      "secondary development difficulty"
-    ]
+  "codex_role": "planning_and_review",
+  "constraints": {
+    "codex_must_not_modify_code": true,
+    "codex_must_not_control_scheduler": true
   }
 }

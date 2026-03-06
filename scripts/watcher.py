@@ -80,9 +80,9 @@ def run_codex(action: str):
     prompt_path = ROOT / "scripts" / prompt_file
     cmd = [
         "codex", "exec",
-        "--dangerously-bypass-approvals-and-sandbox",
-        "--sandbox", "danger-full-access",
-        f"Please execute instructions from {prompt_path.as_posix()}"
+        "--full-auto",
+        "--sandbox", "workspace-write",
+        f"Please execute instructions from {prompt_path.as_posix()} and obey manager/agent_roles_v1.md"
     ]
     p = subprocess.run(cmd, cwd=str(ROOT), text=True, capture_output=True)
     log(f"codex_run action={action} exit={p.returncode}")

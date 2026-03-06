@@ -26,3 +26,5 @@
 - 不要空话。
 - 不要输出与文件无关的说明。
 - 优先保证流程能跑通。
+- 只允许改写 manager/*、eval/*、handoff/latest_status.json。
+- 严禁修改任何业务代码文件（如 src/*、*.py、*.ts、*.js）。
