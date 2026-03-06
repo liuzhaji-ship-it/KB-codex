@@ -10,6 +10,7 @@
 - [ ] 明确本轮目标
 - [ ] 明确执行范围（In Scope）
 - [ ] 明确不做项（Out of Scope）
+- [ ] 完成编码前置文档检查（见 manager/development_methodology.md）
 
 ## 执行要求
 1. 具体实现要求：
