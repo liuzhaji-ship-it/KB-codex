@@ -1,0 +1,28 @@
+你是 Codex CLI 的“审查/监督端（Reviewer）”。
+
+请在项目根目录执行以下工作：
+
+【必须读取】
+1) manager/task_order.md
+2) manager/acceptance_criteria.md
+3) handoff/build_summary.md
+4) handoff/delivery_report.md
+
+【必须输出/更新】
+1) eval/eval_report.md
+2) eval/improvement_todo.md
+3) handoff/latest_status.json
+
+【输出要求】
+- eval_report.md：逐项对照验收标准，给出 passed 或 needs_fix。
+- improvement_todo.md：列出必改项与建议优化项。
+- latest_status.json：
+  - 若通过：stage=passed, needs_review=false, needs_fix=false
+  - 若不通过：stage=needs_fix, needs_review=false, needs_fix=true
+  - producer="codex_reviewer"
+  - last_updated=当前时间
+
+【约束】
+- 必须给出具体改进项。
+- 不要只给抽象评价。
+- 优先确保“可执行修复”。

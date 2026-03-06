@@ -1,0 +1,13 @@
+{
+  "round": 1,
+  "stage": "waiting_for_manager",
+  "producer": "openclaw",
+  "needs_manager": true,
+  "needs_review": false,
+  "needs_fix": false,
+  "current_task": "Initialize dual-executor workflow framework v1",
+  "manager_file": "manager/task_order.md",
+  "todo_file": "eval/improvement_todo.md",
+  "review_file": "eval/eval_report.md",
+  "last_updated": "2026-03-06T14:45:00+08:00"
+}
