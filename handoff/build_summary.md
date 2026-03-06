@@ -1,36 +1,32 @@
 # 本轮构建总结（Build Summary）
 
 ## 本轮完成内容
-- 初始化双执行体协作框架目录：manager/handoff/eval/scripts
-- 初始化通信与管理文件模板
-- 创建 manager/reviewer 两类 Codex CLI Prompt
-- 实现 watcher.py（状态驱动触发 + 防重复 + 日志）
-- 初始化 README 协作说明
+- 完成 OpenClaw/Codex CLI/watcher 就绪性检查
+- OpenClaw 写入并规范化状态文件与构建摘要
+- 使用 Codex CLI（--full-auto）执行最小规划测试并成功回写：
+  - manager/task_order.md
+  - manager/acceptance_criteria.md
+  - handoff/latest_status.json（由 waiting_for_manager -> ready_for_build）
+- OpenClaw 读取 Codex 输出并生成 delivery_report
+- watcher 切换为“最小受控版”：单次评估 + 日志记录 + 不执行外部动作
 
 ## 修改文件
-- manager/system_goal.md
-- manager/task_order.md
-- manager/acceptance_criteria.md
+- handoff/latest_status.json
 - handoff/build_summary.md
 - handoff/delivery_report.md
-- handoff/latest_status.json
-- eval/test_questions.json
-- eval/eval_report.md
-- eval/improvement_todo.md
-- scripts/manager_prompt.txt
-- scripts/reviewer_prompt.txt
+- manager/task_order.md
+- manager/acceptance_criteria.md
 - scripts/watcher.py
-- README.md
 
 ## 当前可用能力
-- 文件化协作协议可用
-- 状态驱动调度框架可用
-- manager/reviewer 提示可被 watcher 调用
+- OpenClaw：可读写文件、可执行 git add/commit/push、可根据项目文档推进任务
+- Codex CLI：可在项目目录读取文件并写回文件（workspace-write）
+- watcher：可读取状态、判断触发条件、输出日志
 
 ## 已知问题
-- watcher 依赖本机已安装并可执行 `codex` CLI
-- 当前为 v1 轮询实现，后续可升级为事件触发
+- Codex CLI 默认 read-only（不加 --full-auto 时无法写回）
+- watcher v1 只做“可触发判断”，未执行真实自动触发（按本轮要求）
 
 ## 建议下一步关注点
-- 启动 watcher 并验证 `waiting_for_manager -> ready_for_build` 自动迁移
-- 用真实任务单跑通第一轮 build -> review -> fix/through 流程
+- 将 watcher 的“可触发”升级为“受控单次真实触发”
+- 为 Codex CLI 调用固化参数（例如 --full-auto）避免因默认 read-only 失败

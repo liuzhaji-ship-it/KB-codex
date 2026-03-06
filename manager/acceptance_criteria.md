@@ -1,28 +1,11 @@
-# 验收标准模板
+﻿# Minimal Acceptance Criteria (Handshake Test)
 
-## 验收对象
-- 对应任务：TASK-YYYYMMDD-001
-- 审查轮次：R1
-
-## 验收项
-
-### 1. 功能是否完成
-- [ ] 目标功能按任务单完成
-- [ ] 核心流程可执行
-
-### 2. 文件是否落地
-- [ ] 任务要求创建/修改的文件都存在
-- [ ] 内容完整且结构合理
-
-### 3. 状态是否更新
-- [ ] `handoff/latest_status.json` 已更新
-- [ ] `stage` 与 `needs_review/needs_fix` 状态一致
-
-### 4. 是否可进入下一阶段
-- [ ] 可进入下一阶段（通过）
-- [ ] 或明确进入修复阶段（needs_fix）
-
-## 判定结果
-- 结论：`passed` / `needs_fix`
-- 原因：
-- 必改项（若有）：
+- Task order file contains handshake-only planning scope.
+- Acceptance file remains concise and excludes business development.
+- latest_status.json has:
+  - stage = ready_for_build
+  - needs_manager = false
+  - producer = codex_manager_test
+  - current_task = minimal planning generated
+  - last_updated refreshed
+- All other latest_status.json fields remain unchanged.

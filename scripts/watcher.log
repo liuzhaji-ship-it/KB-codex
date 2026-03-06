@@ -1,0 +1,7 @@
+[2026-03-06T15:05:50] watcher_minimal started
+[2026-03-06T15:05:50] status stage=waiting_for_review stable=-129.4s since_last_trigger=1772780750.6s checks(stage_ok=True, stable_ok=False, interval_ok=True) action=would_trigger_reviewer
+[2026-03-06T15:05:50] watcher_minimal done triggered=False reason=not_triggered
+[2026-03-06T15:06:13] watcher_minimal started
+[2026-03-06T15:06:13] status stage=waiting_for_review stable=10.6s since_last_trigger=1772780773.6s checks(stage_ok=True, stable_ok=True, interval_ok=True) action=would_trigger_reviewer
+[2026-03-06T15:06:13] trigger_decision: would_trigger_reviewer
+[2026-03-06T15:06:13] watcher_minimal done triggered=True reason=would_trigger_reviewer

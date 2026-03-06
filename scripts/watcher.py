@@ -1,18 +1,15 @@
 import json
-import subprocess
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STATUS_FILE = ROOT / "handoff" / "latest_status.json"
 LOG_FILE = ROOT / "scripts" / "watcher.log"
 
-POLL_SECONDS = 5
-COOLDOWN_SECONDS = 20
-
-last_fingerprint = None
-last_trigger_at = 0.0
+ALLOWED_STAGES = {"waiting_for_manager", "waiting_for_review"}
+MIN_STABLE_SECONDS = 5
+MIN_TRIGGER_INTERVAL_SECONDS = 60
 
 
 def log(msg: str) -> None:
@@ -24,113 +21,65 @@ def log(msg: str) -> None:
 
 
 def load_status() -> dict:
-    if not STATUS_FILE.exists():
-        raise FileNotFoundError(f"status file not found: {STATUS_FILE}")
     return json.loads(STATUS_FILE.read_text(encoding="utf-8"))
 
 
-def save_status(status: dict) -> None:
-    status["last_updated"] = datetime.now().isoformat(timespec="seconds")
-    STATUS_FILE.write_text(json.dumps(status, ensure_ascii=False, indent=2), encoding="utf-8")
+def parse_iso(ts: str):
+    if not ts:
+        return None
+    # 支持 2026-...+08:00 和 ...Z
+    ts = ts.replace("Z", "+00:00")
+    return datetime.fromisoformat(ts)
 
 
-def status_fingerprint(status: dict) -> str:
-    # 只用关键调度字段，避免无关字段导致重复触发
-    key = {
-        "stage": status.get("stage"),
-        "round": status.get("round"),
-        "needs_manager": status.get("needs_manager"),
-        "needs_review": status.get("needs_review"),
-        "needs_fix": status.get("needs_fix"),
-        "current_task": status.get("current_task"),
-    }
-    return json.dumps(key, ensure_ascii=False, sort_keys=True)
+def decide_action(stage: str) -> str:
+    if stage == "waiting_for_manager":
+        return "would_trigger_manager"
+    if stage == "waiting_for_review":
+        return "would_trigger_reviewer"
+    return "no_action"
 
 
-def run_codex_with_prompt(prompt_path: Path) -> tuple[int, str, str]:
-    cmd = [
-        "codex",
-        "exec",
-        f"Please follow instructions in file: {prompt_path.as_posix()}"
-    ]
-    p = subprocess.run(
-        cmd,
-        cwd=str(ROOT),
-        text=True,
-        capture_output=True,
-        shell=False,
-    )
-    return p.returncode, p.stdout, p.stderr
-
-
-def trigger_manager(status: dict) -> None:
-    prompt = ROOT / "scripts" / "manager_prompt.txt"
-    log(f"Trigger manager with prompt: {prompt}")
-    code, out, err = run_codex_with_prompt(prompt)
-    log(f"Manager exit={code}")
-    if out.strip():
-        log(f"Manager stdout: {out[-1000:]}")
-    if err.strip():
-        log(f"Manager stderr: {err[-1000:]}")
-
-    # 如果 Codex 没有正确更新状态，watcher 做兜底迁移
+def evaluate_once(last_trigger_epoch: float = 0.0):
+    now_epoch = time.time()
     status = load_status()
-    if status.get("stage") == "waiting_for_manager":
-        status["stage"] = "ready_for_build"
-        status["needs_manager"] = False
-        status["producer"] = "watcher_fallback"
-        save_status(status)
-        log("Manager fallback status update applied: waiting_for_manager -> ready_for_build")
+
+    stage = status.get("stage", "")
+    last_updated_raw = status.get("last_updated", "")
+    last_updated_dt = parse_iso(last_updated_raw)
+
+    if not last_updated_dt:
+        log("invalid_status: missing/invalid last_updated")
+        return False, "invalid_last_updated", last_trigger_epoch
+
+    stable_seconds = now_epoch - last_updated_dt.timestamp()
+    since_last_trigger = now_epoch - last_trigger_epoch
+
+    stage_ok = stage in ALLOWED_STAGES
+    stable_ok = stable_seconds >= MIN_STABLE_SECONDS
+    interval_ok = since_last_trigger >= MIN_TRIGGER_INTERVAL_SECONDS
+
+    action = decide_action(stage)
+
+    log(
+        f"status stage={stage} stable={stable_seconds:.1f}s since_last_trigger={since_last_trigger:.1f}s "
+        f"checks(stage_ok={stage_ok}, stable_ok={stable_ok}, interval_ok={interval_ok}) action={action}"
+    )
+
+    if stage_ok and stable_ok and interval_ok and action != "no_action":
+        # 第一版仅记录“可触发”，不真正执行外部动作
+        log(f"trigger_decision: {action}")
+        return True, action, now_epoch
+
+    return False, "not_triggered", last_trigger_epoch
 
 
-def trigger_reviewer(status: dict) -> None:
-    prompt = ROOT / "scripts" / "reviewer_prompt.txt"
-    log(f"Trigger reviewer with prompt: {prompt}")
-    code, out, err = run_codex_with_prompt(prompt)
-    log(f"Reviewer exit={code}")
-    if out.strip():
-        log(f"Reviewer stdout: {out[-1000:]}")
-    if err.strip():
-        log(f"Reviewer stderr: {err[-1000:]}")
-
-
-def should_skip_duplicate(fp: str) -> bool:
-    global last_fingerprint, last_trigger_at
-    now = time.time()
-    if fp == last_fingerprint and (now - last_trigger_at) < COOLDOWN_SECONDS:
-        return True
-    return False
-
-
-def mark_triggered(fp: str) -> None:
-    global last_fingerprint, last_trigger_at
-    last_fingerprint = fp
-    last_trigger_at = time.time()
-
-
-def main() -> None:
-    log("Watcher started")
-    while True:
-        try:
-            status = load_status()
-            fp = status_fingerprint(status)
-
-            if should_skip_duplicate(fp):
-                time.sleep(POLL_SECONDS)
-                continue
-
-            stage = status.get("stage")
-            if stage == "waiting_for_manager":
-                mark_triggered(fp)
-                trigger_manager(status)
-            elif stage == "waiting_for_review":
-                mark_triggered(fp)
-                trigger_reviewer(status)
-
-        except Exception as e:
-            log(f"Watcher error: {e}")
-
-        time.sleep(POLL_SECONDS)
+def main():
+    log("watcher_minimal started")
+    last_trigger_epoch = 0.0
+    # 第一版只做一次受控验证，不进入无限循环
+    triggered, reason, last_trigger_epoch = evaluate_once(last_trigger_epoch)
+    log(f"watcher_minimal done triggered={triggered} reason={reason}")
 
 
 if __name__ == "__main__":

@@ -1,27 +1,16 @@
-# 当前任务单（Manager 发布）
+﻿# Minimal Task Order (Handshake Test)
 
-## 元信息
-- 任务编号：TASK-YYYYMMDD-001
-- 轮次：R1
-- 发布方：Codex CLI Manager
-- 发布时间：待填写
+## Objective
+Generate a minimal planning handshake only.
 
-## 本轮目标
-- [ ] 明确本轮目标
-- [ ] 明确执行范围（In Scope）
-- [ ] 明确不做项（Out of Scope）
-- [ ] 完成编码前置文档检查（见 manager/development_methodology.md）
+## In Scope
+- Confirm planner can publish task and acceptance files.
+- Keep content concise and handshake-focused.
 
-## 执行要求
-1. 具体实现要求：
-2. 需要修改/创建的文件：
-3. 运行与验证方式：
+## Out of Scope
+- Any business development or feature implementation.
 
-## 交付要求
-- OpenClaw 更新 `handoff/build_summary.md`
-- OpenClaw 更新 `handoff/delivery_report.md`
-- OpenClaw 更新 `handoff/latest_status.json`
-
-## 状态迁移要求
-- 执行完成后，`stage` 应更新为：`waiting_for_review`
-- `needs_review` 设为 `true`
+## Required Outputs
+- manager/task_order.md updated.
+- manager/acceptance_criteria.md updated.
+- handoff/latest_status.json moved to ready_for_build.
