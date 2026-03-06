@@ -1,0 +1,20 @@
+{
+  "mode": "max_auto",
+  "codex_exec_flags": [
+    "--dangerously-bypass-approvals-and-sandbox",
+    "--sandbox",
+    "danger-full-access"
+  ],
+  "default_owner": "openclaw",
+  "planning_executor": "openclaw",
+  "planner_behavior": {
+    "require_research": true,
+    "min_research_sources": 3,
+    "must_check": [
+      "open-source maturity",
+      "commercial license",
+      "deployment complexity",
+      "secondary development difficulty"
+    ]
+  }
+}

@@ -8,11 +8,11 @@
 
 ## 角色边界
 
-### 1) OpenClaw（执行者）
-- 读取任务单并落实到代码/文档
+### 1) OpenClaw（执行者，默认规划负责人）
+- 默认承担规划动作（Manager）与执行落地
+- 规划阶段必须进行充分调研（优先开源复用与许可审查）
 - 产出 build_summary 与 delivery_report
 - 更新 latest_status.json 表示是否需要审查/修复
-- 不直接扮演规划端
 
 ### 2) Codex CLI（规划/监督者）
 - 读取项目状态与目标

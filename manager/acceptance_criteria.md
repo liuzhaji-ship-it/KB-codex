@@ -1,11 +1,20 @@
-﻿# Minimal Acceptance Criteria (Handshake Test)
+# 验收标准（R2 规划与调研）
 
-- Task order file contains handshake-only planning scope.
-- Acceptance file remains concise and excludes business development.
-- latest_status.json has:
-  - stage = ready_for_build
-  - needs_manager = false
-  - producer = codex_manager_test
-  - current_task = minimal planning generated
-  - last_updated refreshed
-- All other latest_status.json fields remain unchanged.
+## A. 调研充分性
+- [ ] 至少评估 3 个开源候选方案
+- [ ] 每个候选包含：许可、活跃度、部署复杂度、二开难度
+- [ ] 明确是否满足商用要求（MIT/Apache-2.0/等）
+
+## B. 选型合理性
+- [ ] 输出主底座选择结论与理由
+- [ ] 明确可复用模块与自研模块边界
+- [ ] 说明未来可替换点
+
+## C. PoC可执行性
+- [ ] 形成“3 PDF -> 索引 -> 问答 -> 评估”的最小闭环路线
+- [ ] 明确自动化评估产物位置（eval_report.md / improvement_todo.md）
+- [ ] 明确失败时的修复路径
+
+## D. 状态一致性
+- [ ] handoff/latest_status.json 状态与任务阶段一致
+- [ ] 不在未完成调研前进入业务编码

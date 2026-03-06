@@ -1,5 +1,6 @@
 import json
 import time
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -74,11 +75,30 @@ def evaluate_once(last_trigger_epoch: float = 0.0):
     return False, "not_triggered", last_trigger_epoch
 
 
+def run_codex(action: str):
+    prompt_file = "manager_prompt.txt" if action == "would_trigger_manager" else "reviewer_prompt.txt"
+    prompt_path = ROOT / "scripts" / prompt_file
+    cmd = [
+        "codex", "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--sandbox", "danger-full-access",
+        f"Please execute instructions from {prompt_path.as_posix()}"
+    ]
+    p = subprocess.run(cmd, cwd=str(ROOT), text=True, capture_output=True)
+    log(f"codex_run action={action} exit={p.returncode}")
+    if p.stdout.strip():
+        log(f"codex_stdout: {p.stdout[-800:]}")
+    if p.stderr.strip():
+        log(f"codex_stderr: {p.stderr[-800:]}")
+
+
 def main():
     log("watcher_minimal started")
     last_trigger_epoch = 0.0
-    # 第一版只做一次受控验证，不进入无限循环
+    # 单次受控执行：仅跑一次判断 + 如满足条件则执行一次 codex
     triggered, reason, last_trigger_epoch = evaluate_once(last_trigger_epoch)
+    if triggered and reason in {"would_trigger_manager", "would_trigger_reviewer"}:
+        run_codex(reason)
     log(f"watcher_minimal done triggered={triggered} reason={reason}")
 
 
